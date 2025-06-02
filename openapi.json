@@ -1,0 +1,240 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/orders": {
+      "get": {
+        "summary": "List Orders",
+        "operationId": "list_orders_orders_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Orders Orders Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Order",
+        "operationId": "create_order_orders_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error"
+          }
+        }
+      }
+    },
+    "/orders/search": {
+      "get": {
+        "summary": "Search Orders",
+        "operationId": "search_orders_orders_search_get",
+        "parameters": [
+          {
+            "name": "number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  },
+                  "title": "Response Search Orders Orders Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error"
+          }
+        }
+      }
+    },
+    "/orders/{order_id}": {
+      "delete": {
+        "summary": "Delete Order",
+        "operationId": "delete_order_orders__order_id__delete",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Order",
+        "operationId": "update_order_orders__order_id__put",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrderCreate": {
+        "properties": {
+          "client_name": {
+            "type": "string",
+            "title": "Client Name"
+          },
+          "client_email": {
+            "type": "string",
+            "format": "email",
+            "title": "Client Email"
+          },
+          "order_number": {
+            "type": "string",
+            "title": "Order Number"
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Order Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_name",
+          "client_email",
+          "order_number",
+          "order_date"
+        ],
+        "title": "OrderCreate"
+      },
+      "OrderResponse": {
+        "properties": {
+          "client_name": {
+            "type": "string",
+            "title": "Client Name"
+          },
+          "client_email": {
+            "type": "string",
+            "format": "email",
+            "title": "Client Email"
+          },
+          "order_number": {
+            "type": "string",
+            "title": "Order Number"
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Order Date"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "client_name",
+          "client_email",
+          "order_number",
+          "order_date",
+          "id"
+        ],
+        "title": "OrderResponse"
+      }
+    }
+  }
+}
