@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime #importa tipos de dados e colunas do SQLAlchemy para definir a estrutura da tabela no banco de dados
 from sqlalchemy.orm import declarative_base #importa a função que cria a base para os modelos ORM (que mapeiam classes Python para tabelas SQL)
-from datetime import datetime #importa a data atual do sistema, usada para registrar a data do pedido
+from datetime import date #importa a data atual do sistema, usada para registrar a data do pedido
 from pydantic import BaseModel, EmailStr #importa a classe BaseModel do Pydantic, usada para validação de dados da API / EmailStr garante que o email recebido tem formato válido
 
 Base = declarative_base() #cria a classe base usada para definir modelos SQLAlchemy. Todas as tabelas herdarão dela.
