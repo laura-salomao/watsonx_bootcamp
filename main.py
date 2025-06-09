@@ -22,9 +22,12 @@ def get_db():
 @app.post("/orders", response_model=OrderResponse)
 def create_order(order: OrderCreate, db: Session = Depends(get_db)):
 
-    # Se a data vier com hora (datetime), converte para date
-    if isinstance(order.order_date, datetime):
-        order.order_date = order.order_date.date()
+# Garante que o valor seja do tipo date, mesmo se vier como string
+order.order_date = (
+    order.order_date
+    if isinstance(order.order_date, date)
+    else date.fromisoformat(order.order_date)
+)
 
     db_order = Order(**order.dict()) #converte os dados do OrderCreate para um objeto Order compatível com o banco
     db.add(db_order) #adiciona o novo pedido no banco
