@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session #importa a classe Session, usada para trabalh
 from database import engine, SessionLocal #importa objetos do arquivo database.py
 from models import Base, Order, OrderCreate, OrderResponse #importa os modelos definidos no models.py
 from typing import List
+from datetime import date #importa a data atual do sistema, usada para registrar a data do pedido
 
 app = FastAPI() #cria a instância principal da API
 
