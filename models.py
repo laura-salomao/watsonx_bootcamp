@@ -11,12 +11,14 @@ class Order(Base): #cria a classe Order, que representa uma tabela chamada order
     client_name = Column(String, nullable=False) #nome do cliente / nullable=False significa que é obrigatório
     client_email = Column(String, nullable=False) #email do cliente também é obrigatório
     order_number = Column(String, unique=True, nullable=False) #número do pedido / unique=True: o banco não permite dois pedidos com o mesmo número
+    status = Column(String, nullable=False, nullable=False) #status do pedido
     order_date = Column(Date, nullable=False) #data do pedido / Nao esta em formato "DateTime" para conseguir comparar com a data atual no watsonx assistant
 
 class OrderCreate(BaseModel): #esse modelo é usado pelo FastAPI para validar dados quando o cliente envia um novo pedido
     client_name: str
     client_email: EmailStr
     order_number: str
+    status: str
     order_date: date
 
 class OrderResponse(OrderCreate):
