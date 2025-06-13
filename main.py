@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException #importa o FastAPI para criar a aplicação e o Depends para gerenciar injeção de dependências (como o banco de dados)
 from sqlalchemy.orm import Session #importa a classe Session, usada para trabalhar com o banco de dados (inserir, consultar, etc.)
 from database import engine, SessionLocal #importa objetos do arquivo database.py
-from models import Base, Order, OrderCreate, OrderResponse #importa os modelos definidos no models.py
+from models import Base, Order, OrderCreate, OrderResponse, OrderUpdate #importa os modelos definidos no models.py
 from typing import List
 from datetime import date #importa a data atual do sistema, usada para registrar a data do pedido
 
@@ -68,8 +68,24 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"detail": f"Pedido {order_id} removido com sucesso"}
 
+# Endpoint PATCH para atualizar pedidos (apenas o status, a partir do numero do pedido)
+@app.patch("/orders/{order_number}", response_model=OrderResponse)
+def update_order_by_number(order_number: str, order_update: OrderUpdate, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.order_number == order_number).first()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Pedido não encontrado")
+
+    # Atualiza somente os campos enviados
+    for field, value in order_update.dict(exclude_unset=True).items():
+        setattr(order, field, value)
+
+    db.commit()
+    db.refresh(order)
+    return order
+
 # Endpoint PUT para atualizar pedidos
-@app.put("/orders/{order_id}", response_model=OrderResponse)
+""" @app.put("/orders/{order_id}", response_model=OrderResponse)
 def update_order(order_id: int, updated_order: OrderCreate, db: Session = Depends(get_db)):
     db_order = db.query(Order).filter(Order.id == order_id).first()
     if db_order is None:
@@ -80,4 +96,4 @@ def update_order(order_id: int, updated_order: OrderCreate, db: Session = Depend
 
     db.commit()
     db.refresh(db_order)
-    return db_order
+    return db_order """

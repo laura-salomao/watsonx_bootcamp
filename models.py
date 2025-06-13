@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Date #importa tipos de
 from sqlalchemy.orm import declarative_base #importa a função que cria a base para os modelos ORM (que mapeiam classes Python para tabelas SQL)
 from datetime import date #importa a data atual do sistema, usada para registrar a data do pedido
 from pydantic import BaseModel, EmailStr #importa a classe BaseModel do Pydantic, usada para validação de dados da API / EmailStr garante que o email recebido tem formato válido
+from typing import Optional
 
 Base = declarative_base() #cria a classe base usada para definir modelos SQLAlchemy. Todas as tabelas herdarão dela.
 
@@ -11,7 +12,7 @@ class Order(Base): #cria a classe Order, que representa uma tabela chamada order
     client_name = Column(String, nullable=False) #nome do cliente / nullable=False significa que é obrigatório
     client_email = Column(String, nullable=False) #email do cliente também é obrigatório
     order_number = Column(String, unique=True, nullable=False) #número do pedido / unique=True: o banco não permite dois pedidos com o mesmo número
-    status = Column(String, nullable=False, nullable=False) #status do pedido
+    status = Column(String, nullable=False) #status do pedido
     order_date = Column(Date, nullable=False) #data do pedido / Nao esta em formato "DateTime" para conseguir comparar com a data atual no watsonx assistant
 
 class OrderCreate(BaseModel): #esse modelo é usado pelo FastAPI para validar dados quando o cliente envia um novo pedido
@@ -26,3 +27,10 @@ class OrderResponse(OrderCreate):
 
     class Config:
         orm_mode = True
+
+class OrderUpdate(BaseModel):
+    client_name: Optional[str] = None
+    client_email: Optional[EmailStr] = None
+    order_number: Optional[str] = None
+    order_date: Optional[date] = None
+    status: Optional[str] = None
